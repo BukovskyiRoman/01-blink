@@ -209,6 +209,7 @@ void updateButton()
 
         Serial.println("LONG PRESS");
         buttonStateName = "LONG PRESS";
+        ledState = "OFF";
     }
 }
 
@@ -301,6 +302,7 @@ void serialBlink() {
         switch (blinkLedState) {
             case 0:
                 digitalWrite(LED_RED, HIGH);
+                ledState = "RED";
                 digitalWrite(LED_YELLOW, LOW);
                 digitalWrite(LED_GREEN, LOW);
                 digitalWrite(LED_BLUE, LOW);
@@ -310,6 +312,7 @@ void serialBlink() {
             case 1:
                 digitalWrite(LED_RED, LOW);
                 digitalWrite(LED_YELLOW, HIGH);
+                ledState = "YELLOW";
                 digitalWrite(LED_GREEN, LOW);
                 digitalWrite(LED_BLUE, LOW);
                 digitalWrite(LED_WHITE, LOW);
@@ -319,6 +322,7 @@ void serialBlink() {
                 digitalWrite(LED_RED, LOW);
                 digitalWrite(LED_YELLOW, LOW);
                 digitalWrite(LED_GREEN, HIGH);
+                ledState = "GREEN";
                 digitalWrite(LED_BLUE, LOW);
                 digitalWrite(LED_WHITE, LOW);
                 blinkLedState = 3;
@@ -328,6 +332,7 @@ void serialBlink() {
                 digitalWrite(LED_YELLOW, LOW);
                 digitalWrite(LED_GREEN, LOW);
                 digitalWrite(LED_BLUE, HIGH);
+                ledState = "BLUE";
                 digitalWrite(LED_WHITE, LOW);
                 blinkLedState = 4;
                 break;
@@ -337,6 +342,7 @@ void serialBlink() {
                 digitalWrite(LED_GREEN, LOW);
                 digitalWrite(LED_BLUE, LOW);
                 digitalWrite(LED_WHITE, HIGH);
+                ledState = "WHITE";
                 blinkLedState = 0;
                 break;
         }
