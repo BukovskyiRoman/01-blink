@@ -70,6 +70,9 @@ long samplesSum = 0;
 constexpr unsigned long BLINK_MIN_MS = 50;    // slow
 constexpr unsigned long BLINK_MAX_MS = 1000;  // fast
 
+char* ledState = "OFF";
+char* buttonStateName = "RELEASED";
+
 
 void updateLed(int pin, unsigned long interval, unsigned long &previousMillis);
 void handleButtonPress();
@@ -174,6 +177,7 @@ void updateButton()
                 // Confirmed press: falling edge.
                 pressStartTime = now;
                 longPressHandled = false;
+                buttonStateName = "PRESSED";
 
                 Serial.println("BUTTON PRESSED");
             }
@@ -181,6 +185,7 @@ void updateButton()
             {
                 // Confirmed release: rising edge.
                 Serial.println("BUTTON RELEASED");
+                buttonStateName = "RELEASED";
 
                 // A release before long-press handling
                 // is a short press.
@@ -203,7 +208,7 @@ void updateButton()
         longPressHandled = true;
 
         Serial.println("LONG PRESS");
-        //serialBlink();
+        buttonStateName = "LONG PRESS";
     }
 }
 
@@ -221,28 +226,33 @@ void updateActiveLed() {
     switch (activeState)
     {
         case 1:
+            ledState = "RED";
             updateLed(
                 LED_RED, currentBlinkInterval, redPreviousMillis
             );
             break;
 
         case 2:
+            ledState = "YELLOW";
             updateLed(
                 LED_YELLOW, currentBlinkInterval, yellowPreviousMillis
             );
             break;
 
         case 3:
+            ledState = "GREEN";
             updateLed(
                 LED_GREEN, currentBlinkInterval, greenPreviousMillis
             );
             break;
         case 4:
+            ledState = "BLUE";
             updateLed(
                 LED_BLUE, currentBlinkInterval, bluePreviousMillis
             );
             break;
         case 5:
+            ledState = "WHITE";
             updateLed(
                 LED_WHITE, currentBlinkInterval, whitePreviousMillis
             );
@@ -370,17 +380,25 @@ void drawScreen()
     display.setTextColor(SSD1306_WHITE);
 
     display.setCursor(0, 0);
-    display.println("ESP32 SYSTEM");
+    display.println("ESP32 CONTROLLER");
 
     display.drawLine(0, 10, 127, 10, SSD1306_WHITE);
 
-    display.setCursor(0, 20);
-    display.println("Uptime:");
+    display.setCursor(0, 17);
+    display.setTextSize(1);
+    display.print("LED: ");
+    display.println(ledState);
 
-    display.setTextSize(2);
-    display.setCursor(0, 35);
-    display.print(uptimeSeconds);
+    display.setTextSize(1);
+    display.setCursor(0, 31);
+    display.print("BUTTON: ");
+    display.println(buttonStateName);
+    display.setCursor(0, 45);
+    display.print("UPTIME: ");       
+    display.print(uptimeSeconds);   
     display.println(" sec");
+
+    display.drawLine(0, 62, 127, 62, SSD1306_WHITE);
 
     display.display();
 }
